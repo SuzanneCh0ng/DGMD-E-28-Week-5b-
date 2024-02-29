@@ -1,2 +1,200 @@
+# DGMD-E-28-Week-5-joes_1_2.html
+link: https://suzannech0ng.github.io/DGMD-E-28-Week-5a-/
+
+//Code lines as your reference below.
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Assignment 3: Part 1 & 2</title>
+  </head>
+  <body>
+    <h1>Menu (json)</h1>
+    <ul class="menu" id="menu-json"></ul>
+
+    <h1>Menu (fn object)</h1>
+    <ul class="menu" id="menu-fnobj"></ul>
+  </body>
+  <script>
+    let itemsToPrices1 = {
+      'hotdogs' : 4,
+      'fries' : 3.5,
+      'soda' : 1.5,
+      'sauerkraut' : 1
+    };
+    let itemsToPrices2 = {
+      'menu' : [
+        {'item': 'hotdogs', 'price': 4},
+        {'item': 'fries', 'price': 3.50},
+        {'item': 'soda', 'price': 1.50},
+        {'item': 'sauerkraut', 'price': 1}
+      ]
+    };
+
+    function ItemToPrice(item, price) {
+      this.item = item;
+      this.price = price;
+    }
+    let itemsToPrices3 = [
+      new ItemToPrice('hotdogs', 4),
+      new ItemToPrice('fries', 3.50),
+      new ItemToPrice('soda', 1.50),
+      new ItemToPrice('sauerkraut', 1)
+    ];
+
+    function displayMenuInJson(menuInJson) {
+      let menuUl = document.getElementById('menu-json');
+      for (const itemToPrice of menuInJson['menu']) {
+        let ItemPriceLi = document.createElement("li");
+        ItemPriceLi.textContent = `${itemToPrice.item}: $${itemToPrice.price.toFixed(2)}`;
+        menuUl.appendChild(ItemPriceLi);
+      }
+    }
+
+    function displayMenuInFnObject(menuInFnObject) {
+      let menuUl = document.getElementById('menu-fnobj');
+      for (const itemToPrice of menuInFnObject) {
+        let ItemPriceLi = document.createElement("li");
+        ItemPriceLi.textContent = `${itemToPrice.item}: $${itemToPrice.price.toFixed(2)}`;
+        menuUl.appendChild(ItemPriceLi);
+      }
+    }
+
+    displayMenuInJson(itemsToPrices2);
+    displayMenuInFnObject(itemsToPrices3);
+  </script>
+</html>
+
 # DGMD-E-28-Week-5-joes_3_5.html
 link: https://suzannech0ng.github.io/DGMD-E-28-Week-5b-/
+
+//Code lines as your reference below.
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Assignment 3: Part 1 & 2</title>
+  </head>
+  <body>
+    <h1>Menu (json)</h1>
+    <ul class="menu" id="menu-json"></ul>
+
+    <h1>Menu (fn object)</h1>
+    <ul class="menu" id="menu-fnobj"></ul>
+
+    <h1>Add to Cart</h1>
+    <div>
+      <input type="text" id="item-name" placeholder="item name">
+      <button id="add-cart">Add</button>
+    </div>
+  
+    <h1>Cart</h1>
+    <div id="cart"></div>
+  
+    <h1>Checkout</h1>
+    <button id="checkout">Checkout</button>
+  </body>
+  <script>
+    let itemsToPrices1 = {
+      'hotdogs' : 4,
+      'fries' : 3.5,
+      'soda' : 1.5,
+      'sauerkraut' : 1
+    };
+    let itemsToPrices2 = {
+      'menu' : [
+        {'item': 'hotdogs', 'price': 4},
+        {'item': 'fries', 'price': 3.50},
+        {'item': 'soda', 'price': 1.50},
+        {'item': 'sauerkraut', 'price': 1}
+      ]
+    };
+
+    function ItemToPrice(item, price) {
+      this.item = item;
+      this.price = price;
+    }
+    let itemsToPrices3 = [
+      new ItemToPrice('hotdogs', 4),
+      new ItemToPrice('fries', 3.50),
+      new ItemToPrice('soda', 1.50),
+      new ItemToPrice('sauerkraut', 1)
+    ];
+
+    function displayMenuInJson(menuInJson) {
+      let menuUl = document.getElementById('menu-json');
+      for (let itemToPrice of menuInJson['menu']) {
+        let ItemPriceLi = document.createElement("li");
+        ItemPriceLi.textContent = `${itemToPrice.item}: $${itemToPrice.price.toFixed(2)}`;
+        menuUl.appendChild(ItemPriceLi);
+      }
+    }
+
+    function displayMenuInFnObject(menuInFnObject) {
+      let menuUl = document.getElementById('menu-fnobj');
+      for (let itemToPrice of menuInFnObject) {
+        let ItemPriceLi = document.createElement("li");
+        ItemPriceLi.textContent = `${itemToPrice.item}: $${itemToPrice.price.toFixed(2)}`;
+        menuUl.appendChild(ItemPriceLi);
+      }
+    }
+
+    displayMenuInJson(itemsToPrices2);
+    displayMenuInFnObject(itemsToPrices3);
+
+    let shoppingCart = {};
+    for (let itemToPrice of itemsToPrices3) {
+      shoppingCart[itemToPrice.item] = 0;
+    }
+
+    function updateCart() {
+      let shoppingCartUl = document.createElement("ul");
+      for (let item in shoppingCart) {
+        if (shoppingCart[item] > 0) {
+          let ItemQuantityLi = document.createElement("li");
+          ItemQuantityLi.textContent = `${item}: ${shoppingCart[item]}`;
+          shoppingCartUl.appendChild(ItemQuantityLi);
+        }
+      }
+      let cartDiv = document.getElementById('cart');
+      cartDiv.innerHTML = "";
+      if (shoppingCartUl.children.length == 0) {
+        cartDiv.innerHTML = "cart is empty";
+      } else {
+        cartDiv.appendChild(shoppingCartUl);
+      }
+    }
+
+    document.getElementById('add-cart').addEventListener("click", () => {
+      let itemNameInput = document.getElementById("item-name");
+      if (itemNameInput.value in shoppingCart) {
+        shoppingCart[itemNameInput.value]++;
+        updateCart();
+      } else {
+        alert("Item not on the menu.");
+      }
+      itemNameInput.value = ""; // Clear input field after adding
+    });
+
+    updateCart();
+
+    document.getElementById('checkout').addEventListener("click", (event) => {
+      let total = 0;
+      let popupMsg = '';
+      for (let item in shoppingCart) {
+        if (shoppingCart[item] > 0) {
+          popupMsg += `${item} x ${shoppingCart[item]} = $${(shoppingCart[item] * itemsToPrices1[item]).toFixed(2)}\n`;
+          total += shoppingCart[item] * itemsToPrices1[item];
+        }
+      }
+      popupMsg += `total: $${total.toFixed(2)}`;
+      alert(popupMsg);
+
+      shoppingCart = {};
+      for (let itemToPrice of itemsToPrices3) {
+        shoppingCart[itemToPrice.item] = 0;
+      }
+      updateCart();
+    });
+  </script>
+</html>
